@@ -1,0 +1,37 @@
+ENV := $(PWD)/../.env
+include $(ENV)
+export
+
+
+SSHCMD=ssh -i ${SSHKEY} root@${PNAME}.${HOSTDOMAIN}
+SCPCMD=scp -r -i ${SSHKEY}
+
+clean:
+	cd src; rm -rf node_modules || true;
+
+wipe:
+	cd src; rm -rf storage || true
+	
+install:
+	cd src; npm install
+
+run: install
+	cd src; npm run start
+
+makecert:
+	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 365 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
+
+upload:
+	$(MAKE) clean
+	$(MAKE) wipe
+	${SSHCMD} 'mkdir -p /opt/${PNAME}'
+	${SCPCMD} ./src/* root@${PNAME}.${HOSTDOMAIN}:/opt/${PNAME}/
+	${SSHCMD} 'chown -R node:node /opt/${PNAME}'
+	${SSHCMD} 'cd /opt/${PNAME}; su node -c "npm install"'
+	${SCPCMD} ./${PNAME}.service root@${PNAME}.${HOSTDOMAIN}:/etc/systemd/system/${PNAME}.service
+	${SSHCMD} 'systemctl enable ${PNAME}; systemctl restart ${PNAME}'
+
+remote-uninstall:
+	${SSHCMD} 'systemctl stop ${PNAME}; systemctl disable ${PNAME}'
+	${SSHCMD} 'rm /etc/systemd/system/${PNAME}.service'
+	${SSHCMD} 'rm -rf /opt/${PNAME}'

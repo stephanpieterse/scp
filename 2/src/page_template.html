@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <title>{{PAGE_TITLE}}</title>
+  <style>
+    body {
+      font-family: sans;
+      font-size: 2em;
+      background-color: white;
+    }
+
+    .error_section {
+      color: red;
+    }
+
+    .main {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <span class="error_section">
+      {{BODY_ERROR}}
+    </span>
+    <br />
+    {{BODY_MESSAGE}}
+    <br />
+    <form action="{{FORM_ACTION}}" method="post">
+      <input type="text" name="{{INPUT_NAME}}" value="" />
+      <input type="submit" name="submit" value="Submit" />
+    </form>
+    <br />
+    {{BODY_FOOTER}}
+  </div>
+</body>
+
+</html>

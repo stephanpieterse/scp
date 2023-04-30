@@ -1,0 +1,43 @@
+::Cloud_puzzle1_explain
+That is correct!
+Firewalls are used to protect the edges of compute
+
+::Cloud_puzzle1
+<<print $successMessage>>
+You see a fluffy white cloud with what looks like computer hardware in it.
+There is a note:
+
+<<link 'The wall of fire' Cloud_puzzle_transition >> <<set $successMessage = "Correct!" >> <</link>>
+<<link 'The river' $cloudpuzzle >> <<set $successMessage = "Nothing happens">>  <</link>>
+<<link 'The rock' $cloudpuzzle >> <<set $successMessage = "Nothing happens">>  <</link>>
+
+<<include Link_back>>
+
+::Cloud_puzzle_transition
+<<set $explainPassage = "Cloud_puzzle" + $cloudPuzzleNum + "_explain" >>
+<<set $challengesTimes[$cloudpuzzle] = new Date()>>
+<<include $explainPassage>>
+
+The wall moves up, exposing new images
+<<set $cloudPuzzleNum += 1>>
+<<set $cloudpuzzle = "Cloud_puzzle" + $cloudPuzzleNum >>
+
+<<link 'Look' $cloudpuzzle>><</link>>
+
+::Cloud_puzzle2
+# loadbalancers
+You see multiple items
+
+<<include Link_back>>
+
+::Cloud_puzzle3
+<<include Link_back>>
+
+::Cloud_puzzle4
+<<include Link_back>>
+
+::Cloud_puzzle5
+<<include Link_back>>
+
+
+::Cloud_puzzle_end

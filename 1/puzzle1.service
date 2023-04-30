@@ -1,0 +1,10 @@
+[Unit]
+Description=Puzzle1 server
+
+[Service]
+User=node
+ExecStart=/usr/bin/npm run start
+WorkingDirectory=/opt/puzzle1
+
+[Install]
+WantedBy=multi-user.target

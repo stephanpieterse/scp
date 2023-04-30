@@ -1,0 +1,31 @@
+::StoryTitle
+The Puzzle Chamber
+
+:: StoryData
+{
+	"ifid": "B38306A1-94EF-46FC-9A50-54ACA64EBE25"
+}
+
+::Start
+<<set $challengesTimes = {}>>
+<<set $cloudPuzzleNum = 1>>
+<<link 'Enter' 'Central Room'>><</link>>
+
+::Central Room
+You are in a room and you see 3 walls
+
+<<link 'View the wall labelled Crypto'>><</link>>
+<<set $cloudpuzzle = "Cloud_puzzle" + $cloudPuzzleNum >>
+<<link 'View the wall labelled Cloud' $cloudpuzzle>><</link>>
+<<link 'View the wall labelled Time' 'Timewall'>><</link>>
+
+::Timewall
+In front of you is a plaque with inscriptions
+<<for _i , _name range $challengesTimes>>
+_i _name
+<</for>>
+
+<<link 'Back to the center' 'Central Room'>><</link>>
+
+::Link_back
+<<link 'Back to the center' 'Central Room'>><</link>>

@@ -1,0 +1,33 @@
+::Crypto_puzzle1
+
+Let's start things off simply 
+
+	Uif Dbftfs Djqifs
+
+<<textbox "$p1answer" "Answer">>
+<<link 'Submit'>>
+<<if $p1answer == "The Caeser Cipher">>
+<<goto Crypto_puzzle_transition>>
+<<else>>
+<<goto Crypto_puzzle1>>
+<</if>>
+
+<</link>>
+
+<<include Link_back>>
+
+::Crypto_puzzle_transition
+
+::Crypto_puzzle2
+
+A to Z
+
+Zgyzhs rh yzxpdziwh
+<<include Link_back>>
+
+
+::Crypto_puzzle3
+The key is Golden
+
+Zvp nil COD jsyjsy
+<<include Link_back>>
