@@ -10,4 +10,5 @@ base64, curl, hashing, DNS
 Browser based challenege
 
 ## 3:
-Local, code challenge
+Local, code challenge.
+Randomly generated math problems

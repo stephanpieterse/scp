@@ -2,16 +2,16 @@ const express = require('express');
 const https = require('https');
 const app = express();
 const fs = require('fs');
+const path = require('path');
 
 const log = require('bunyan')({
     "name": "puzzle2",
     "src": true
 });
-const crypto = require('crypto');
 
-const thepage = fs.readFileSync('page_template.html').toString();
-const thepageend = fs.readFileSync('page_template_end.html').toString();
-let hashOffs = 7;
+const crypto = require('crypto');
+const thepage = fs.readFileSync(path.resolve(__dirname,'page_template.html')).toString();
+const thepageend = fs.readFileSync(path.resolve(__dirname,'page_template_end.html')).toString();
 
 function templater(src, values) {
     log.debug(src);
@@ -42,18 +42,11 @@ app.get("/start", function (req, res) {
     res.send(p);
 });
 
-const refererString = 'Want to make your own challenges or need cloud compute? Check out DigitalOcean! https://m.do.co/c/800b984d1764';
 
 function getCode(mail, offset) {
     let ocode = crypto.createHash('sha512').update(mail).digest('hex').substring(offset * 7, (offset * 7) + 7);
     return ocode;
 }
-
-app.use(function (req, res, next) {
-    res.set('x-doref', refererString);
-    res.set('x-feedback', 'scpchallenge@gmail.com');
-    next();
-});
 
 app.use(express.urlencoded({
     extended: true
@@ -223,8 +216,8 @@ https.createServer({
     requestTimeout: 10000,
     headersTimeout: 5000,
     timeout: 10000,
-    key: fs.readFileSync('./serverkey.pem'),
-    cert: fs.readFileSync('./servercert.pem'),
+    key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
 }, app).listen(8092, '127.0.0.1', function () {
     log.info('Server started on port 8092');
 });

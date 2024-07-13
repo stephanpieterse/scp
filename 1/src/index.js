@@ -11,7 +11,6 @@ const log = require('bunyan')({
 var crypto = require('crypto');
 
 let srvname = "scp2305p1.apollolms.co.za";
-let feedbackEmail = 'scpchallenge@gmail.com';
 const rateLimit = require('express-rate-limit');
 const storage = require('node-persist');
 storage.init({
@@ -31,7 +30,6 @@ const limiter = rateLimit({
     keyGenerator: rateLimKeyGen,
 });
 
-const refererString = 'Want to make your own challenges or need cloud compute? Check out DigitalOcean! https://m.do.co/c/800b984d1764';
 app.use(limiter);
 let mcache = {};
 
@@ -78,8 +76,6 @@ app.get('/start', function (req, res) {
 
 app.use(function (req, res, next) {
     res.set('x-challenge', 'scp-23-05:puzzle1');
-    res.set('x-doref', refererString);
-    res.set('x-feedback', feedbackEmail);
     if (req.headers['host'].split(':')[0] != srvname) {
         log.debug(req.headers);
         res.set('x-clue', 'puzzle1 has been a great HOST, but it is time to HEAD somewhere else');
@@ -339,8 +335,6 @@ app.patch('/submission', function (req, res) {
         res.json({
             "message": "Well done on completing this challenge! Thanks for playing :)",
             "stats": stat,
-            "feedback": feedbackEmail,
-            "referal": refererString
         });
     });
 

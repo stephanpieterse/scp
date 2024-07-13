@@ -3,16 +3,14 @@ const https = require('https');
 const app = express();
 const fs = require('fs');
 const crypto = require('crypto');
+const path = require('path');
 let log = {
     'info': function() {
         console.log(new Date(), JSON.stringify(arguments));
     }
 };
 
-const refererString = 'Want to make your own challenges or need cloud compute? Check out DigitalOcean! https://m.do.co/c/800b984d1764';
-const feedbackEmail = 'scpchallenge@gmail.com';
-
-const timeLimit = 180;
+const timeLimit = 10;
 
 const config = {
     port: 8093
@@ -156,8 +154,6 @@ Call /progress to check your status
 
 app.use(function(req, res, next) {
     res.set('x-challenge', 'scp-23-07:puzzle3');
-    res.set('x-doref', refererString);
-    res.set('x-feedback', feedbackEmail);
 
     if (!req.headers['x-username']) {
         res.status(400);
@@ -275,8 +271,8 @@ https.createServer({
     requestTimeout: 10000,
     headersTimeout: 5000,
     timeout: 10000,
-    key: fs.readFileSync('./serverkey.pem'),
-    cert: fs.readFileSync('./servercert.pem'),
+    cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
+    key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
 }, app).listen(config.port, '127.0.0.1', function() {
     log.info('Server started on port ' + config.port);
 });
