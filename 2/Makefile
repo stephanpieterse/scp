@@ -14,3 +14,6 @@ install:
 run: install
 	cd src; npm run start
 
+build:
+	$(MAKE) install
+	cd src && npx pkg index.js

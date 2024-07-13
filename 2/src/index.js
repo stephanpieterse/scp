@@ -2,11 +2,6 @@ const express = require('express');
 const https = require('https');
 const app = express();
 const fs = require('fs');
-const storage = require('node-persist');
-storage.init({
-    dir: "storage",
-    writeQueue: false
-});
 
 const log = require('bunyan')({
     "name": "puzzle2",
