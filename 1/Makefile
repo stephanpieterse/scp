@@ -15,8 +15,8 @@ run: install
 	cd src; npm run start
 
 makecert:
-	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 3 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
+	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 365 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
 
 build:
 	$(MAKE) install
-	cd src && npx pkg index.js
+	cd src && npx pkg .

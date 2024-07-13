@@ -1,9 +1,11 @@
 const app = require('express')();
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
+process.env["NODE_CONFIG_DIR"] = path.join(__dirname, "./config/");
 const config = require('config');
 const log = require('bunyan')({
-    "name": config.get('name'),
+    "name": config['name'],
     "src": true,
 });
 var crypto = require('crypto');
@@ -223,7 +225,7 @@ app.put('/check-some/*', function (req, res) {
         });
         return;
     }
-    if ((new Date()) - mcache[req._challenge_mail].dt >= config.get('fastTimeout')) {
+    if ((new Date()) - mcache[req._challenge_mail].dt >= config['fastTimeout']) {
         res.json({
             "error": "Token expired!"
         });
@@ -317,7 +319,7 @@ app.patch('/submission', function (req, res) {
         return;
     }
 
-    if ((new Date()) - mcache[req._challenge_mail].dt >= config.get('fastTimeout') * 2) {
+    if ((new Date()) - mcache[req._challenge_mail].dt >= config['fastTimeout'] * 2) {
         res.json({
             "error": "Token expired, faster!"
         });
@@ -355,11 +357,11 @@ app.use((err, req, res, next) => {
 
 
 https.createServer({
-    requestTimeout: 10000,
-    headersTimeout: 5000,
+    requestTimeout: 2000,
+    headersTimeout: 1000,
     timeout: 10000,
-    key: fs.readFileSync('./serverkey.pem'),
-    cert: fs.readFileSync('./servercert.pem'),
-}, app).listen(config.get('port'), '127.0.0.1', function () {
-    log.info('Server started on port ' + config.get('port'));
+    cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
+    key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
+}, app).listen(config['port'], '127.0.0.1', function () {
+    log.info('Server started on port ' + config['port']);
 });
