@@ -208,14 +208,13 @@ app.post("/:mail/7", function (req, res) {
     let p = templater(thepageend, vals);
     res.set("x-winning", "true!");
     log.info(mail + " won!");
-    //res.send("Ultimate winner!");
     res.send(p);
 });
 
 https.createServer({
-    requestTimeout: 10000,
-    headersTimeout: 5000,
-    timeout: 10000,
+    requestTimeout: 2000,
+    headersTimeout: 1000,
+    timeout: 2000,
     key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
     cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
 }, app).listen(8092, '127.0.0.1', function () {

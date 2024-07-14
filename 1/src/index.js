@@ -10,66 +10,13 @@ const log = require('bunyan')({
 });
 var crypto = require('crypto');
 
-let srvname = "scp2305p1.apollolms.co.za";
-const rateLimit = require('express-rate-limit');
-const storage = require('node-persist');
-storage.init({
-    dir: "storage",
-    writeQueue: false
-});
+let srvname = "scp2305p1.apollolms";
 
-function rateLimKeyGen(req, res) {
-    return "" + req.ip + req.headers['x-email'];
-}
-
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000,
-    max: 60,
-    standardHeaders: false, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: true, // Disable the `X-RateLimit-*` headers,
-    keyGenerator: rateLimKeyGen,
-});
-
-app.use(limiter);
 let mcache = {};
-
-app.get("/stats", function (req, res) {
-    if (req.headers['x-auth'] != '22ea5e5afe25dff211b140cbbb179a11') {
-        res.status(401).send("Unauthenticated");
-        return;
-    }
-    storage.keys().then(async function (keys) {
-        let xx = [];
-        for (let k in keys) {
-            let x = await storage.getItem(keys[k]);
-            x.name = keys[k];
-            x.id = crypto.createHash('md5').update(keys[k]).digest('hex');
-            xx.push(x);
-        }
-        let winners = xx.filter(function (a) {
-            return a.completed;
-        });
-        winners = winners.sort(function (a, b) {
-            a.timeFinished < b.timeFinished;
-        });
-        res.json({
-            "competing": xx.length,
-            "winners": winners.length,
-            "wins": winners,
-            "stats": xx
-        });
-    });
-});
 
 app.get('/start', function (req, res) {
     res.send(`
 		Welcome to this challenge!  <br/>
-		Some things before we get started  <br/>
-		<br/>
-		1) Dont be rude! <br/>
-		2) E-mail Address is used for stats. If you aren't into that, use an invalid one.
-		<br/>
-		<br/>
 		curl this server on / to get started!
 `);
 });
@@ -108,21 +55,6 @@ app.use(function (req, res, next) {
     }
     req._challenge_mail = mail;
 
-    storage.getItem("stats/" + mail).then(function (stat) {
-        if (stat) {
-            stat.calls += 1;
-            stat.lastSeen = new Date();
-            storage.setItem("stats/" + mail, stat);
-        } else {
-            let pstat = {
-                calls: 1,
-                timeStarted: new Date(),
-                lastSeen: new Date(),
-                completed: false
-            };
-            storage.setItem("stats/" + mail, pstat);
-        }
-    });
     next();
 });
 
@@ -161,7 +93,7 @@ app.get('/check-some/:hashed', function (req, res) {
     var ohash = crypto.createHash('sha256').update(mail).digest('hex').substring(0, 7);
     var nhash = crypto.createHash('md5').update(ohash).digest('hex');
     if (hs != nhash) {
-        res.set('x-clue', 'I plead the fifth. That sums it up.');
+        res.set('x-clue', 'I plead the fifth. That sums it up. And nothing new here!');
         res.json({
             "error": "Bad hash"
         });
@@ -256,7 +188,7 @@ app.patch('/submission', function (req, res) {
         });
         return;
     }
-    log.info(req.body);
+    log.debug(req.body);
     let ddat = req.body['token'];
     if (!ddat) {
         res.json({
@@ -295,7 +227,7 @@ app.patch('/submission', function (req, res) {
         return;
     }
 
-    log.info(check);
+    log.debug(check);
     if (check.indexOf('+') == -1) {
         res.json({
             "error": "Gotta keep that data seperated"
@@ -304,7 +236,7 @@ app.patch('/submission', function (req, res) {
     }
 
     if (check != cs) {
-        log.info({
+        log.debug({
             "submission": check,
             "vs": cs,
             "mail": req._challenge_mail
@@ -322,20 +254,9 @@ app.patch('/submission', function (req, res) {
         return;
     }
 
-    let mail = req._challenge_mail;
-
-    storage.getItem("stats/" + mail).then(function (stat) {
-
-        if (!stat.completed) {
-            stat.timeFinished = new Date();
-            stat.completed = true;
-            storage.setItem("stats/" + mail, stat);
-        }
-
-        res.json({
-            "message": "Well done on completing this challenge! Thanks for playing :)",
-            "stats": stat,
-        });
+    log.info("Winner!");
+    res.json({
+        "message": "Well done on completing this challenge! Thanks for playing :)"
     });
 
 });
@@ -346,7 +267,7 @@ app.use(function (req, res, next) {
 
 app.use((err, req, res, next) => {
     log.error(err);
-    res.status(500).send('An error occured! It has been logged and we will look into it');
+    res.status(500).send('An error occured! Please check for an existing issue, or make one on the main repo.');
 });
 
 

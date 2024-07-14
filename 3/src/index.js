@@ -125,7 +125,6 @@ function generatePuzzle() {
                 break;
         }
     }
-    log.info(problemMap);
 }
 
 let problemMap = {

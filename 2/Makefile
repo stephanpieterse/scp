@@ -1,12 +1,8 @@
 PNAME=puzzle2
 CERTNAME=scp2306p2.apollolms.co.za
-#include ../Makebasefile
 
 clean:
 	cd src; rm -rf node_modules || true;
-
-wipe:
-	cd src; rm -rf storage || true
 	
 install:
 	cd src; npm install
@@ -15,8 +11,8 @@ run: install
 	cd src; npm run start
 
 makecert:
-	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 365 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
+	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 3650 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
 
 build:
 	$(MAKE) install
-	cd src && npx pkg .
+	cd src && npx pkg --compress GZip .
