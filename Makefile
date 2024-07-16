@@ -1,6 +1,6 @@
 GH_OWNER=stephanpieterse
 GH_REPO=scp
-GH_RELEASE_VERSION=2024-07-16-A
+GH_RELEASE_VERSION=2024-07-16-B
 
 build-all:
 	cd 1 && $(MAKE) build
