@@ -1,6 +1,6 @@
 GH_OWNER=stephanpieterse
 GH_REPO=scp
-GH_RELEASE_VERSION=2024-07-15-B
+GH_RELEASE_VERSION=2024-07-16-A
 
 release-all:
 	if [ -z "$$GH_TOKEN" ]; then echo No token !; exit 1; fi
