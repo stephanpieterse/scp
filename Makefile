@@ -2,6 +2,12 @@ GH_OWNER=stephanpieterse
 GH_REPO=scp
 GH_RELEASE_VERSION=2024-07-16-A
 
+build-all:
+	cd 1 && $(MAKE) build
+	cd 2 && $(MAKE) build
+	cd 3 && $(MAKE) build
+	cd 4 && $(MAKE) build
+
 release-all:
 	if [ -z "$$GH_TOKEN" ]; then echo No token !; exit 1; fi
 	curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GH_TOKEN}" -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/releases \

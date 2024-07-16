@@ -1,5 +1,5 @@
 {
 	"name": "challenge1",
-  "port": 8091,
-  "fastTimeout": 1000
+  "port": 8443,
+  "fastTimeout": 800
 }
