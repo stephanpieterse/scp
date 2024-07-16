@@ -12,7 +12,7 @@ const config = {
 
 const log = {
     error: function () {
-        console.log(arguments);
+        console.error(arguments);
     },
     info: function () {
         console.log(arguments);
@@ -63,7 +63,6 @@ app.use(function (req, res, next) {
         return;
     }
 
-    mcache[req.ip].count += 1;
     if (mcache[req.ip].count >= config.totalRequests) {
         mcache[req.ip].won = true;
     }
@@ -92,6 +91,7 @@ app.use(function (req, res, next) {
     umap[ukey] += 1;
     res.set("x-key", umap[ukey]);
     setTimeout(function () {
+        mcache[req.ip].count += 1;
         res.send(':-)');
     }, umap[ukey] * 1000);
 });
