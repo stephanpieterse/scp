@@ -1,12 +1,13 @@
 GH_OWNER=stephanpieterse
 GH_REPO=scp
-GH_RELEASE_VERSION=2024-07-16-B
+GH_RELEASE_VERSION=2024-07-17-A
 
 build-all:
 	cd 1 && $(MAKE) build
 	cd 2 && $(MAKE) build
 	cd 3 && $(MAKE) build
 	cd 4 && $(MAKE) build
+	cd 5 && $(MAKE) build
 
 release-all:
 	if [ -z "$$GH_TOKEN" ]; then echo No token !; exit 1; fi
@@ -17,6 +18,7 @@ release-all:
 	cd 2 && $(MAKE) build && $(MAKE) -f ../Makefile release-gh
 	cd 3 && $(MAKE) build && $(MAKE) -f ../Makefile release-gh
 	cd 4 && $(MAKE) build && $(MAKE) -f ../Makefile release-gh
+	cd 5 && $(MAKE) build && $(MAKE) -f ../Makefile release-gh
 	rm -f _release_details.txt || true
 
 release-gh:
