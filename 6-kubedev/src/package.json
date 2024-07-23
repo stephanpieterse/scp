@@ -1,0 +1,25 @@
+{
+  "name": "puzzle6-kubedev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.21.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "pkg": {
+    "assets": [],
+    "outputPath": "../dist",
+    "targets": [
+      "node18-linux-x64",
+      "node18-macos-x64",
+      "node18-win-x64"
+    ]
+  }
+}
