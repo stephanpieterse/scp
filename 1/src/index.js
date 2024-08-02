@@ -10,6 +10,16 @@ const log = require('bunyan')({
 });
 var crypto = require('crypto');
 
+const PImage = require("pureimage");
+const font = PImage.registerFont(
+    "source-sans-pro.regular.ttf",
+    "Arial",
+);
+//load font
+font.loadSync();
+
+const { PassThrough } = require("stream");
+
 let srvname = "scp2305p1.apollolms";
 
 let mcache = {};
@@ -60,15 +70,12 @@ app.use(function (req, res, next) {
 
 app.get('/', function (req, res) {
     let mail = req._challenge_mail;
-    var hash = crypto.createHash('sha256').update(mail).digest('hex').substring(0, 7);
-    const {
-        createCanvas
-    } = require("canvas");
+    let hash = crypto.createHash('sha256').update(mail).digest('hex').substring(0, 7);
 
     const WIDTH = 170;
     const HEIGHT = 100;
 
-    const canvas = createCanvas(WIDTH, HEIGHT);
+    const canvas = PImage.make(WIDTH, HEIGHT);
     const ctx = canvas.getContext("2d");
 
     ctx.fillStyle = "#202020";
@@ -79,11 +86,18 @@ app.get('/', function (req, res) {
     ctx.font = "14px Arial";
     ctx.fillText("/check-some/{h}", 13, 70);
 
-    const buffer = canvas.toBuffer("image/png");
-    res.set('x-clue', 'Can you decode it?');
-    res.json({
-        "png": buffer.toString('base64')
+    const passThroughStream = new PassThrough();
+    const pngData = [];
+    passThroughStream.on("data", (chunk) => pngData.push(chunk));
+    passThroughStream.on("end", () => {});
+    PImage.encodePNGToStream(canvas, passThroughStream).then(() => {
+        let buffer = Buffer.concat(pngData);
+        res.set('x-clue', 'Can you decode it?');
+        res.json({
+            "png": buffer.toString('base64')
+        });
     });
+
 });
 
 app.get('/check-some/:hashed', function (req, res) {
@@ -278,5 +292,5 @@ https.createServer({
     cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
     key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
 }, app).listen(config['port'], '127.0.0.1', function () {
-    log.info('Server started on port ' + config['port']);
+    log.info('Secure server started on localhost port ' + config['port']);
 });

@@ -12,9 +12,9 @@
     "license": "ISC",
     "dependencies": {
         "bunyan": "^1.8.15",
-        "canvas": "^2.11.2",
         "config": "^3.3.9",
-        "express": "^4.19.2"
+        "express": "^4.19.2",
+        "pureimage": "^0.4.13"
     },
     "pkg": {
         "assets": [

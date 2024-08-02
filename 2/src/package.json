@@ -19,7 +19,6 @@
     },
     "pkg": {
         "assets": [
-            "*.pem",
             "*.html"
         ],
         "outputPath": "../dist",

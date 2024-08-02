@@ -10,9 +10,6 @@ install:
 run: install
 	cd src; npm run start
 
-makecert:
-	cd src; openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -days 3650 -subj "/C=ZA/CN=${CERTNAME}" -nodes 
-
-build: makecert
+build:
 	$(MAKE) install
 	cd src && npx pkg --compress GZip .

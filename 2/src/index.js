@@ -1,5 +1,5 @@
 const express = require('express');
-const https = require('https');
+const http = require('http');
 const app = express();
 const fs = require('fs');
 const path = require('path');
@@ -211,14 +211,12 @@ app.post("/:mail/7", function (req, res) {
     res.send(p);
 });
 
-https.createServer({
+http.createServer({
     requestTimeout: 2000,
     headersTimeout: 1000,
     timeout: 2000,
-    key: fs.readFileSync(path.resolve(__dirname, 'serverkey.pem')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'servercert.pem')),
 }, app).listen(8092, '127.0.0.1', function () {
-    log.info('Server started on port 8092');
+    log.info('Server started on localhost port 8092');
 });
 
 module.exports = {
