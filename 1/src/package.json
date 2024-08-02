@@ -19,7 +19,8 @@
     "pkg": {
         "assets": [
             "*.pem",
-            "config/*"
+            "config/*",
+            "*.ttf"
         ],
         "outputPath": "../dist",
         "targets": [

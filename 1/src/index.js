@@ -12,7 +12,7 @@ var crypto = require('crypto');
 
 const PImage = require("pureimage");
 const font = PImage.registerFont(
-    "source-sans-pro.regular.ttf",
+    path.resolve(__dirname, "source-sans-pro.regular.ttf"),
     "Arial",
 );
 //load font
